@@ -87,9 +87,9 @@ console.log(f());
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 
-function returnArgumentsArray() {
+function returnArgumentsArray(...args) {
 
-    let res = [];
+/* let res = [];
 
     for ( let i = 0; i !== arguments.length; i++) {
 
@@ -97,7 +97,8 @@ function returnArgumentsArray() {
 
     }
 
-    return res;
+    return res; */
+return [...args];
 
 }
 returnArgumentsArray(4, 8, 9);
@@ -120,20 +121,11 @@ returnArgumentsArray(4, 8, 9);
  */
 
 function bindFunction(fn, ...args) {
+    return fn.bind(null, ...args);
 
-    function sum() {
-        arguments.reduce = [].reduce;
-        
-        return arguments.reduce(function (a, b) {
-            return a + b;
-        });
-    }
-    
-    return sum.bind(null, ...args);
 }
-var newSum = bindFunction(null, 2, 4);
+let newSum = bindFunction((...args) => console.log(args), 2, 4);
 
-console.log(newSum());
 
 export {
     returnFirstArgument,
