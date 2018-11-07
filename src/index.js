@@ -122,6 +122,12 @@ var obj = {
 };
 */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        set(target, prop, value) {
+            target[prop] = value * value;
+            return true;
+        }
+    });
 
 }
 
