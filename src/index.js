@@ -3,27 +3,45 @@
 /*
  Задание 1:
 
- 1.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
- Функция должна вернуть true только если fn вернула true для всех элементов массива
+ 1.1: 1-Функция принимает массив и фильтрующую фукнцию и 2-должна
+ вернуть true или false. Функция 3-должна вернуть true только если
+ fn вернула true для всех элементов массива
 
  1.2: Необходимо выбрасывать исключение в случаях:
    - array не массив или пустой массив (с текстом "empty array")
    - fn не является функцией (с текстом "fn is not a function")
-
- Зарпещено использовать встроенные методы для работы с массивами
-
+Зарпещено использовать встроенные методы для работы с массивами
  Пример:
    isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
 function isAllTrue(array, fn) {
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function');
+    }else if (!(array instanceof Array )|| array.length <=0 ) {
+        throw new Error('empty array');
+    }
+    var n = true;
+    for (var i = 0; i <array.length; i++) {
+        n = fn(array[i]);
+        if (!n) {
+            return false;
+        }
+    }
+    return true;
+}
+try {
+    isAllTrue([-100, 2, 3, 4, 5], n => n < 10);
+} catch (e) {
+    console.log(e.message);
 }
 
 /*
  Задание 2:
 
- 2.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
- Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
+ 2.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть
+  true или false. Функция должна вернуть true если fn вернула true хотя
+  бы для одного из элементов массива
 
  2.2: Необходимо выбрасывать исключение в случаях:
    - array не массив или пустой массив (с текстом "empty array")
@@ -36,22 +54,57 @@ function isAllTrue(array, fn) {
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
 function isSomeTrue(array, fn) {
+    try {
+        if (typeof fn !== 'function') {
+            throw new Error('fn is not a function');
+        }
+    }catch (e) {
+        console.log(e.message);
+    }
+    if (!(array instanceof Array) || array.length <= 0) {
+        throw new Error('empty array');
+    }
+    var n = false;
+
+    for (var i = 0; i <array.length; i++) {
+        n = fn(array[i]);
+        if (n === true) {
+            return true;
+        }
+    }
+    return false;
+
 }
+isSomeTrue([1, 2, 3, 4, 5], n => n > 20);
 
 /*
  Задание 3:
 
- 3.1: Функция принимает заранее неизветсное количество аргументов, первым из которых является функция fn
- Функция должна поочередно запустить fn для каждого переданного аргумента (кроме самой fn)
+ 3.1: Функция принимает заранее неизветсное количество аргументов,
+ первым из которых является функция fn. Функция должна поочередно
+ запустить fn для каждого переданного аргумента (кроме самой fn)
 
- 3.2: Функция должна вернуть массив аргументов, для которых fn выбросила исключение
+ 3.2: Функция должна вернуть массив аргументов, для которых fn выбросила
+ исключение
 
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
 function returnBadArguments(fn) {
+    var tryArg = [];
+    var arg;
+    if ( typeof fn !== 'function' ) {
+        throw new Error('fn is not a function');
+    }
+    for (var i = 1; i < arguments.length; i++) {
+        try {
+            arg = fn(arguments[i]);
+        } catch (e) {
+            tryArg.push(arguments[i]);
+        }
+    }
+    return tryArg;
 }
-
 /*
  Задание 4:
 
@@ -60,8 +113,10 @@ function returnBadArguments(fn) {
  4.2: Функция должна вернуть объект, у которого должно быть несколько методов:
    - sum - складывает number с переданными аргументами
    - dif - вычитает из number переданные аргументы
-   - div - делит number на первый аргумент. Результат делится на следующий аргумент (если передан) и так далее
-   - mul - умножает number на первый аргумент. Результат умножается на следующий аргумент (если передан) и так далее
+   - div - делит number на первый аргумент. Результат делится на следующий
+   аргумент (если передан) и так далее
+   - mul - умножает number на первый аргумент.
+   Результат умножается на следующий аргумент (если передан) и так далее
 
  Количество передаваемых в методы аргументов заранее неизвестно
 
@@ -69,9 +124,55 @@ function returnBadArguments(fn) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
-}
+function calculator(number) {
 
+    if (number === undefined) {
+        number = 0;
+    }
+    if (typeof number !== 'number') {
+        throw new Error('number is not a number');
+    }
+
+    var ob = {
+        sum: function () {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] === 0) {
+                    throw new Error('division by 0');
+                }
+                number += arguments[i];
+            }
+            return number;
+        },
+        dif: function () {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] === 0) {
+                    throw new Error('division by 0');
+                }
+                number -= arguments[i];
+            }
+            return number;
+        },
+        div: function () {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] === 0) {
+                    throw new Error('division by 0');
+                }
+                number /= arguments[i];
+            }
+            return number;
+        },
+        mul: function () {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] === 0) {
+                    throw new Error('division by 0');
+                }
+                number *= arguments[i];
+            }
+            return number;
+        }
+    };
+    return ob;
+}
 /* При решении задач, пострайтесь использовать отладчик */
 
 export {
