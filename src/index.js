@@ -110,48 +110,43 @@ function returnBadArguments(fn) {
 
  4.1: Функция имеет параметр number (по умолчанию - 0)
 
- 4.2: Функция должна вернуть объект, у которого должно быть несколько методов:
+ 4.2: Функция должна вернуть объект, у которого должно быть несколько
+  методов:
    - sum - складывает number с переданными аргументами
    - dif - вычитает из number переданные аргументы
-   - div - делит number на первый аргумент. Результат делится на следующий
+   - div - делит number на первый аргумент. Результат делится
+    на следующий
    аргумент (если передан) и так далее
    - mul - умножает number на первый аргумент.
    Результат умножается на следующий аргумент (если передан) и так далее
 
- Количество передаваемых в методы аргументов заранее неизвестно
+Количество передаваемых в методы аргументов заранее неизвестно
 
  4.3: Необходимо выбрасывать исключение в случаях:
    - number не является числом (с текстом "number is not a number")
-   - какой-либо из аргументов div является нулем (с текстом "division by 0")
+   - какой-либо из аргументов div является нулем
+   (с текстом "division by 0")
  */
-function calculator(number) {
-
-    if (number === undefined) {
-        number = 0;
+var obj;
+function calculator(number = 0) {
+    if (!isFinite(number)) {
+        throw new Error ('number is not a number');
     }
-    if (typeof number !== 'number') {
-        throw new Error('number is not a number');
-    }
-
-    var ob = {
+    return obj = {
         sum: function () {
             for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
                 number += arguments[i];
             }
             return number;
         },
+
         dif: function () {
             for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
                 number -= arguments[i];
             }
             return number;
         },
+
         div: function () {
             for (var i = 0; i < arguments.length; i++) {
                 if (arguments[i] === 0) {
@@ -161,18 +156,18 @@ function calculator(number) {
             }
             return number;
         },
+
         mul: function () {
             for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] === 0) {
-                    throw new Error('division by 0');
-                }
                 number *= arguments[i];
             }
             return number;
         }
-    };
-    return ob;
+
+    }
+
 }
+
 /* При решении задач, пострайтесь использовать отладчик */
 
 export {
